@@ -10,8 +10,11 @@ def setModules(process, options):
     process.hltFilter.throw = cms.bool(False)
     process.hltFilter.HLTPaths = options['TnPPATHS']
     
-    from EgammaAnalysis.TnPTreeProducer.pileupConfiguration_cfi import pileupProducer
-    process.pileupReweightingProducer = pileupProducer.clone()    
+    #from EgammaAnalysis.TnPTreeProducer.pileupConfiguration_cfi import pileupProducer
+    #process.pileupReweightingProducer = pileupProducer.clone()    
+    
+    import EgammaAnalysis.TnPTreeProducer.pileupConfiguration_cff as pileUpSetup
+    pileUpSetup.setPileUpConfiguration(process, options)
 
     ###################################################################
     ## ELECTRON MODULES
@@ -27,7 +30,7 @@ def setModules(process, options):
                                                  vertexSelection = cms.int32(-1), # -1 means take the chosen vertex, otherwise use the index to select 2it                                
                                                  #diPhotonMVATag = cms.InputTag("flashggUpdatedIdMVADiPhotons"),                                                                          
                                                  diPhotonMVATag = cms.InputTag("flashggDiPhotonMVA"),
-                                                 diphotonMVAThreshold = cms.double(-0.6)
+                                                 diphotonMVAThreshold = cms.double(-1.1)#lf:was -0.6
                                                  )
 
     #produces tag collection from diphotons                                                                                                                                               
@@ -57,8 +60,8 @@ def setModules(process, options):
                                                       inputs      = cms.InputTag("goodPhotonProbesIDMVA"),
                                                       bits        = cms.InputTag(options['TRIGGER_RES']),
                                                       objects     = cms.InputTag(options['PAT_TRIG']),
-                                                      dR          = cms.double(0.3),
-                                                      isAND       = cms.bool(False)
+                                                      dR          = cms.double(0.1),#0.3
+                                                      isAND       = cms.bool(False)#it is empty
                                                       )
     #numerator for Preselection                                                                                                                                                           
     process.goodPhotonProbesPreselection = cms.EDProducer("FlashggPhotonSelectorByValueMap",
@@ -69,17 +72,18 @@ def setModules(process, options):
                                                           )
     
     #probes match to l1                                                                                                                                                                   
-    process.goodPhotonProbesL1 = cms.EDProducer("FlashggPhotonL1CandProducer",
-    #process.goodPhotonProbesL1 = cms.EDProducer("FlashggPhotonL1Stage2CandProducer",
+    #process.goodPhotonProbesL1 = cms.EDProducer("FlashggPhotonL1CandProducer",
+    process.goodPhotonProbesL1 = cms.EDProducer("FlashggPhotonL1Stage2CandProducer",
                                                 inputs = cms.InputTag("goodPhotonProbesPreselection"),
                                                 #isoObjects = cms.InputTag("l1extraParticles:Isolated"),
                                                 #nonIsoObjects = cms.InputTag("l1extraParticles:NonIsolated"),
                                                 #objects = cms.InputTag("hltCaloStage2Digis:EGamma"),
                                                 objects = cms.InputTag("caloStage2Digis:EGamma"),
-                                                #minET = cms.double(15), #lead eff only
-                                                minET = cms.double(10), #sublead eff only
+                                                #minET = cms.double(25), #lead eff only
+                                                #minET = cms.double(14), #sublead eff only
+                                                minET = cms.double(0.), #test on how L1 efficiency with the whole big OR changes vs time
                                                 dRmatch = cms.double(0.2), #defined to match L1 online matching to hlt (0.261)
-                                                #dRmatchEE = cms.double(0.2), #defined to match L1 online matching to hlt (should probably be tightened for stage2)
+                                                dRmatchEE = cms.double(0.2), #defined to match L1 online matching to hlt (should probably be tightened for stage2)
                                                 isolatedOnly = cms.bool(False)
                                                 )
 
@@ -89,7 +93,7 @@ def setModules(process, options):
                                                     inputs      = cms.InputTag("goodPhotonProbesPreselection"),
                                                     bits        = cms.InputTag(options['TRIGGER_RES']),
                                                     objects     = cms.InputTag(options['PAT_TRIG']),
-                                                    dR          = cms.double(0.3),
+                                                    dR          = cms.double(0.1),#0.3
                                                     isAND       = cms.bool(False)
                                                     )
     
@@ -117,7 +121,7 @@ def setModules(process, options):
                                                         inputs      = cms.InputTag("goodPhotonTagsPreselection"),
                                                         bits        = cms.InputTag(options['TRIGGER_RES']),
                                                         objects     = cms.InputTag(options['PAT_TRIG']),
-                                                        dR          = cms.double(0.3),
+                                                        dR          = cms.double(0.1),#0.3
                                                         isAND       = cms.bool(False)
                                                         )
     #good preselected tag photons for denominator                                                                                                                                         
@@ -126,9 +130,9 @@ def setModules(process, options):
                                                   inputs      = cms.InputTag("goodPhotonsTagLeadMatch"),
                                                   bits        = cms.InputTag(options['TRIGGER_RES']),
                                                   objects     = cms.InputTag(options['PAT_TRIG']),
-                                                  dR          = cms.double(0.3),
-                                                  isAND       = cms.bool(False)
-                                                  )
+                                                  dR          = cms.double(0.1),#0.3)
+                                                  isAND       = cms.bool(True)# Set as true to require the tag to pass also the l1 of HLT_Ele35 in 2017 (for 2016 and 2018 makes no difference)                                                  
+    )
 
 
 
@@ -136,7 +140,7 @@ def setModules(process, options):
     ###################################################################                                                                                                                   
     ## PHOTON ISOLATION                                                                                                                                                                   
     ###################################################################            
-    process.load("RecoEgamma/PhotonIdentification/PhotonIDValueMapProducer_cfi")
+    process.load("RecoEgamma/PhotonIdentification/photonIDValueMapProducer_cfi")
     process.noL1RECO = cms.EDProducer("CandViewShallowCloneCombiner",
                                       decay = cms.string("goodPhotonsTagHLT goodPhotonProbesPreselection"),
                                       #decay = cms.string("goodPhotonsTagHLT goodPhotonsProbeHLT"),
