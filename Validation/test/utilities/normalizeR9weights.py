@@ -6,14 +6,16 @@ import sys
 def main(options):
     fdata = ROOT.TFile(options.input)
     fmc = ROOT.TFile(options.weight)
-    hmc = fmc.Get("eta_vs_r9_norm")
-    
-    hmc.Scale(1/hmc.Integral())
+    hmc = fmc.Get("ggh_125_13TeV_AllR9Eta_R9VsEtaLead")#name of the 2D matrix in the reweighting root file
+    #hmc = fmc.Get("ggh_90_13TeV_AllR9Eta_R9VsEtaLead")#for low-mass analysis
+    #hmc = fmc.Get("r9_eta_weights_histo")
+    print hmc.GetName()
+    hmc.Scale((float(hmc.GetNbinsX()))*(float(hmc.GetNbinsY()))/hmc.Integral())
     
     fdata.cd()
     directories = fdata.GetListOfKeys()
 
-    outFile = options.input.split(".root")[0]+"_norm.root"    
+    outFile = options.input.split(".root")[0]+"_r9eta.root"    
     newFile = ROOT.TFile(outFile, "RECREATE")
 
     for d in directories:
@@ -25,27 +27,24 @@ def main(options):
 
         #--- Write to new file
         #tree.SetBranchStatus("*", 1)
-        #tree.SetBranchStatus("totWeight", 0) 
+        #tree.SetBranchStatus("newWeight", 0) 
         #tree.SetBranchStatus("PUweight", 0) 
 
         directory_new = newFile.mkdir(d.GetName())
         directory_new.cd()
         tree_new = tree.CloneTree(0)
 
-        #tree.SetBranchStatus("totWeight", 1)
+        #tree.SetBranchStatus("newWeight", 1)
         #tree.SetBranchStatus("PUweight", 1)
 
-        # FIXME TO NORMALIZE TO LUMINOSITY
-        
-        b_totWeight = array.array('f', [0])
+        b_newWeight = array.array('f', [0])
         b_PUweight = array.array('f', [0])
-        tree_new.Branch("totWeight", b_totWeight, "totWeight/F")
+        tree_new.Branch("r9etaWeight", b_newWeight, "r9etaWeight/F")
         tree_new.Branch("PUweight", b_PUweight, "PUweight/F")
         
         for z in range(entries):
             tree.GetEntry(z)
-            #if (tree.weight >=0):
-            b_totWeight[0] = hmc.GetBinContent(hmc.FindBin(tree.probe_Pho_r9, tree.probe_sc_abseta))
+            b_newWeight[0] = hmc.GetBinContent(hmc.FindBin(tree.ph_full5x5x_r9, tree.ph_sc_abseta))
             tree_new.Fill()
         tree_new.GetCurrentFile().Write()
 
@@ -54,10 +53,12 @@ def main(options):
 
 if __name__ == "__main__":  
     parser = OptionParser()
-                    #../data/r9_eta_weights.root -input ../../output_histos.root
-    parser.add_option("-w", "--weight",   default="../data/r9_eta_weights.root",   help="weights input filename")
-    parser.add_option("-i", "--input", default="../../output_histos.root", help="Data input filename")
 
+#specify here the name of the r9-eta reweighting file
+    parser.add_option("-w", "--weight",   default="r9_eta_weights2017UL.root",   help="weights input filename")
+#specify here the file to which we want to add the weight branch
+    parser.add_option("-i", "--input", default="~/work/Hgg/test/CMSSW_10_6_8/src/flashgg/Validation/test/STD_UNS_17UL_200807/htot.root", help="Data input filename")
+    
     (options, arg) = parser.parse_args()
     
     main(options)

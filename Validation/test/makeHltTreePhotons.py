@@ -14,7 +14,7 @@ options = dict()
 
 isLEAD=False #True = SEEDED LEG, False = UNSEEDED LEG
 
-options['isMC']                   = True #normally HLT efficiencies are computed on data
+options['isMC']                   = False#normally HLT efficiencies are computed on data
 options['era']                   = "2017" #needed for PU reweighting
 options['PHOTON_COLL']           = "slimmedPhotons"
 options['DIPHOTON_COLL']         = "flashggPreselectedDiPhotons"
@@ -54,12 +54,12 @@ from flashgg.Validation.treeMakerOptionsHLT_cfi import *
 
 if (options['isMC']): 
     options['OUTPUT_FILE_NAME']      = "TnPTree_mc.root"
-    options['GLOBALTAG']             = '92X_dataRun2_Prompt_v4'#to be changed accordingly to the year
+    options['GLOBALTAG']             = "106X_mc2017_realistic_v7" #to be changed accordingly to the year
     mylist =  FileUtils.loadListFromFile('/afs/cern.ch/user/l/lfinco/work/Hgg/test/CMSSW_10_6_8/src/flashgg/Validation/test/tempFileList_MC.txt') #needed when you run locally
     
 else: 
     options['OUTPUT_FILE_NAME']      = "TnPTree_data.root"
-    options['GLOBALTAG']             = '92X_dataRun2_Prompt_v4' #to be changed accordingly to the year
+    options['GLOBALTAG']             = "106X_dataRun2_v17" #to be changed accordingly to the year
     mylist =  FileUtils.loadListFromFile('/afs/cern.ch/user/l/lfinco/work/Hgg/test/CMSSW_10_6_8/src/flashgg/Validation/test/tempFileList.txt') #needed when you run locally
 
 readFiles      = cms.untracked.vstring(*mylist)
