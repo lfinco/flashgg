@@ -38,9 +38,9 @@ def main(options):
         #tree.SetBranchStatus("PUweight", 1)
 
         b_newWeight = array.array('f', [0])
-        b_PUweight = array.array('f', [0])
+        #b_PUweight = array.array('f', [0])
         tree_new.Branch("r9etaWeight", b_newWeight, "r9etaWeight/F")
-        tree_new.Branch("PUweight", b_PUweight, "PUweight/F")
+        #tree_new.Branch("PUweight", b_PUweight, "PUweight/F")
         
         for z in range(entries):
             tree.GetEntry(z)
@@ -54,9 +54,9 @@ def main(options):
 if __name__ == "__main__":  
     parser = OptionParser()
 
-#specify here the name of the r9-eta reweighting file
+#specify here the name of the r9-eta reweighting file:
     parser.add_option("-w", "--weight",   default="r9_eta_weights2017UL.root",   help="weights input filename")
-#specify here the file to which we want to add the weight branch
+#specify here the file to which we want to add the weight branch:
     parser.add_option("-i", "--input", default="~/work/Hgg/test/CMSSW_10_6_8/src/flashgg/Validation/test/STD_UNS_17UL_200807/htot.root", help="Data input filename")
     
     (options, arg) = parser.parse_args()
