@@ -1,0 +1,1 @@
+root://xrootd-cms.infn.it//store/group/phys_higgs/cmshgg/alesauva/flashgg/UL2017/10_6_4/SingleElectron/UL2017-10_6_4-v0-Run2017E-09Aug2019_UL2017-v1/200423_203018/0000/myMicroAODOutputFile_93.root
