@@ -13,6 +13,9 @@ DiPhotonTagBase::DiPhotonTagBase()
 DiPhotonTagBase::DiPhotonTagBase( edm::Ptr<flashgg::DiPhotonCandidate> diPho, edm::Ptr<DiPhotonMVAResult> mvaRes )
     : DiPhotonTagBase::DiPhotonTagBase( diPho, *mvaRes ) {}
 
+//DiPhotonTagBase::DiPhotonTagBase( edm::Ptr<flashgg::DiPhotonCandidate> diPho, edm::Ptr<DiPhotonMVAResult> mvaRes , edm::Ptr<VBFMVAResult> vbf_mvaRes )
+//: DiPhotonTagBase::DiPhotonTagBase( diPho, *mvaRes, *vbf_mvaRes ) {}
+
 DiPhotonTagBase::DiPhotonTagBase( edm::Ptr<flashgg::DiPhotonCandidate> diPho, DiPhotonMVAResult mvaRes )
 {
     mva_result_ = mvaRes;
@@ -20,6 +23,26 @@ DiPhotonTagBase::DiPhotonTagBase( edm::Ptr<flashgg::DiPhotonCandidate> diPho, Di
     dipho_ = diPho;
     isGold_ = -1;
 }
+
+DiPhotonTagBase::DiPhotonTagBase( edm::Ptr<flashgg::DiPhotonCandidate> diPho, DiPhotonMVAResult mvaRes, VBFMVAResult vbf_mvaRes )
+{
+    mva_result_ = mvaRes;
+    category_number_ = -1;
+    dipho_ = diPho;
+    isGold_ = -1;
+    vbf_mva_result_ = vbf_mvaRes ;
+}
+
+DiPhotonTagBase::DiPhotonTagBase( edm::Ptr<flashgg::DiPhotonCandidate> diPho, DiPhotonMVAResult mvaRes, VBFMVAResult vbf_mvaRes, GluGluHMVAResult ggh_mvaRes )
+{
+    mva_result_ = mvaRes;
+    category_number_ = -1;
+    dipho_ = diPho;
+    isGold_ = -1;
+    vbf_mva_result_ = vbf_mvaRes ;
+    ggh_mva_result_ = ggh_mvaRes ;
+}
+
 
 DiPhotonTagBase::~DiPhotonTagBase()
 {

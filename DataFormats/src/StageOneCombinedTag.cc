@@ -14,12 +14,18 @@ StageOneCombinedTag::StageOneCombinedTag( edm::Ptr<flashgg::DiPhotonCandidate> d
 StageOneCombinedTag::StageOneCombinedTag( edm::Ptr<DiPhotonCandidate> dipho, DiPhotonMVAResult mvares ) :
     DiPhotonTagBase::DiPhotonTagBase( dipho, mvares ) {
 }
+StageOneCombinedTag::StageOneCombinedTag( edm::Ptr<DiPhotonCandidate> dipho, DiPhotonMVAResult mvares, VBFMVAResult vbf_mvaRes ) :
+    DiPhotonTagBase::DiPhotonTagBase( dipho, mvares, vbf_mvaRes ) {
+}
 
+StageOneCombinedTag::StageOneCombinedTag( edm::Ptr<DiPhotonCandidate> dipho, DiPhotonMVAResult mvares, VBFMVAResult vbf_mvaRes, GluGluHMVAResult ggh_mvaRes ) :
+    DiPhotonTagBase::DiPhotonTagBase( dipho, mvares, vbf_mvaRes, ggh_mvaRes ) {
+}
 StageOneCombinedTag::StageOneCombinedTag( edm::Ptr<flashgg::DiPhotonCandidate> diPho, edm::Ptr<DiPhotonMVAResult> mvaRes, edm::Ptr<VBFMVAResult> vbf_mvaRes, edm::Ptr<VHhadMVAResult> vhHad_mvaRes, edm::Ptr<GluGluHMVAResult> ggh_mvaRes ) :
     StageOneCombinedTag::StageOneCombinedTag( diPho, *mvaRes, *vbf_mvaRes, *vhHad_mvaRes, *ggh_mvaRes ) {}
 
 StageOneCombinedTag::StageOneCombinedTag( edm::Ptr<DiPhotonCandidate> dipho, DiPhotonMVAResult mvares, VBFMVAResult vbf_mvaRes, VHhadMVAResult vhHad_mvaRes, GluGluHMVAResult ggh_mvaRes ) :
-    StageOneCombinedTag::StageOneCombinedTag( dipho, mvares )
+    StageOneCombinedTag::StageOneCombinedTag( dipho, mvares, vbf_mvaRes, ggh_mvaRes )
 {
     vbfmva_result_ = vbf_mvaRes;
     vhhadmva_result_ = vhHad_mvaRes;

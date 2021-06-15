@@ -18,6 +18,8 @@ namespace flashgg {
 
         StageOneCombinedTag( edm::Ptr<DiPhotonCandidate>, edm::Ptr<DiPhotonMVAResult> );
         StageOneCombinedTag( edm::Ptr<DiPhotonCandidate>, DiPhotonMVAResult );
+        StageOneCombinedTag( edm::Ptr<DiPhotonCandidate>, DiPhotonMVAResult, VBFMVAResult );
+        StageOneCombinedTag( edm::Ptr<DiPhotonCandidate>, DiPhotonMVAResult, VBFMVAResult, GluGluHMVAResult );
         StageOneCombinedTag( edm::Ptr<DiPhotonCandidate>, edm::Ptr<DiPhotonMVAResult>, edm::Ptr<VBFMVAResult>, edm::Ptr<VHhadMVAResult>, edm::Ptr<GluGluHMVAResult> );
         StageOneCombinedTag( edm::Ptr<DiPhotonCandidate>, DiPhotonMVAResult, VBFMVAResult, VHhadMVAResult, GluGluHMVAResult );
 

@@ -3,6 +3,8 @@
 
 #include "flashgg/DataFormats/interface/DiPhotonCandidate.h"
 #include "flashgg/DataFormats/interface/DiPhotonMVAResult.h"
+#include "flashgg/DataFormats/interface/VBFMVAResult.h"
+#include "flashgg/DataFormats/interface/GluGluHMVAResult.h"
 #include "flashgg/DataFormats/interface/TagTruthBase.h"
 
 namespace flashgg {
@@ -49,6 +51,9 @@ namespace flashgg {
         virtual ~DiPhotonTagBase(); 
         DiPhotonTagBase( edm::Ptr<DiPhotonCandidate>, DiPhotonMVAResult );
         DiPhotonTagBase( edm::Ptr<DiPhotonCandidate>, edm::Ptr<DiPhotonMVAResult> );
+        DiPhotonTagBase( edm::Ptr<DiPhotonCandidate>, DiPhotonMVAResult, VBFMVAResult );
+        DiPhotonTagBase( edm::Ptr<DiPhotonCandidate>, DiPhotonMVAResult, VBFMVAResult, GluGluHMVAResult );
+        //DiPhotonTagBase( edm::Ptr<DiPhotonCandidate>, edm::Ptr<DiPhotonMVAResult>, edm::Ptr<VBFMVAResult> );
         const edm::Ptr<DiPhotonCandidate> diPhoton() const { return dipho_; }
 
         const flashgg::Photon *leadingPhoton() const { return dipho_->leadingPhoton(); }
@@ -102,8 +107,14 @@ namespace flashgg {
         DiPhotonTagBase::tag_t otherTagType( unsigned i ) const { return otherTagTypes_[i]; }
         int otherTagCategory( unsigned i ) const { return otherTagCategories_[i]; }
         int otherTagDiPhotonIndex ( unsigned i ) const { return otherTagIndices_[i]; }
-    protected:
+   
+        const VBFMVAResult VBFMVA() const { return vbf_mva_result_ ; }
+        const GluGluHMVAResult GGHMVA() const { return ggh_mva_result_; }
+
+ protected:
         DiPhotonMVAResult mva_result_;
+        VBFMVAResult vbf_mva_result_;
+        GluGluHMVAResult ggh_mva_result_;
         int category_number_;
         int diPhotonIndex_;
         edm::Ptr<DiPhotonCandidate> dipho_;
